@@ -1,24 +1,17 @@
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.classfile.instruction.ThrowInstruction;
-import java.security.PublicKey;
 import java.util.Random;
 
-import javax.accessibility.AccessibleRelationSet;
-import javax.imageio.plugins.tiff.ExifGPSTagSet;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.text.StyledEditorKit.ForegroundAction;
-import javax.xml.stream.events.EndDocument;
 
 public class TicTacToe implements ActionListener{
 
