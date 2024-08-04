@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.classfile.instruction.ThrowInstruction;
+import java.security.PublicKey;
 import java.util.Random;
 
 import javax.accessibility.AccessibleRelationSet;
@@ -22,21 +23,86 @@ import javax.xml.stream.events.EndDocument;
 public class TicTacToe implements ActionListener{
 
 	Random ramdom = new Random();
-	JFrame frame = new JFrame();
+	JFrame board = new JFrame();
+	JFrame mainMenu = new JFrame();
+	JButton newGameButton = new JButton();
+	JButton quitGameButton = new JButton();
 	JPanel titlePanel = new JPanel();
 	JPanel buttonPanel = new JPanel();
 	JLabel textField = new JLabel();
+	JLabel mainMenuLabel = new JLabel();
+	JPanel menuTitlePanel = new JPanel();
 	JOptionPane drawOption = new JOptionPane(); 
 	JButton[] buttons = new JButton[9];
 	boolean player1Turn;
 	
 	TicTacToe(){
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(800,800);
-		frame.getContentPane().setBackground(Color.black);
-		frame.setLayout(new BorderLayout());
-		frame.setVisible(true);
+		//Main menu
+		mainMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainMenu.setSize(600,600);
+		mainMenu.getContentPane().setBackground(Color.black);
+		mainMenu.setTitle("Tic Tac Toe Program");
+		mainMenu.setLayout(null);
+		mainMenu.setVisible(true);
 		
+		//Main menu label
+        mainMenuLabel.setBackground(Color.black);
+		mainMenuLabel.setForeground(new Color(25,255,0));
+		mainMenuLabel.setFont(new Font("Ink Free", Font.BOLD, 75));
+		mainMenuLabel.setText("Tic-Tac-Toe");
+		mainMenuLabel.setOpaque(true);
+		
+		menuTitlePanel.setLayout(new BorderLayout());
+		menuTitlePanel.setBounds(80,100,600,100);
+		
+		//New game button
+		newGameButton.setFont(new Font("Tahoma", Font.BOLD, 30));
+		newGameButton.setFocusable(false);
+		newGameButton.setText("New game");
+		newGameButton.setForeground(Color.white);
+		newGameButton.setBorder(null);
+		newGameButton.setBackground(null);
+		newGameButton.setBounds(175, 250, 200, 50);
+		newGameButton.addActionListener( new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				mainMenu.setVisible(false);	
+				gameOpener();
+			}
+		});
+		
+		//Quit game button
+		quitGameButton.setFont(new Font("Tahoma", Font.BOLD, 30));
+	    quitGameButton.setFocusable(false);
+	    quitGameButton.setText("Quit");
+	    quitGameButton.setForeground(Color.white);
+	    quitGameButton.setBorder(null);
+		quitGameButton.setBackground(null);
+		quitGameButton.setBounds(175, 350, 200, 50);
+	    quitGameButton.addActionListener(new ActionListener() {
+	    	
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	                System.exit(0);
+	        }
+	    });
+		menuTitlePanel.add(mainMenuLabel);
+	    mainMenu.add(menuTitlePanel);
+	    mainMenu.add(newGameButton);
+	    mainMenu.add(quitGameButton);
+	}
+	
+	public void gameOpener() {
+		
+		//Game board
+		board.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		board.setSize(800,800);
+		board.getContentPane().setBackground(Color.black);
+		board.setLayout(new BorderLayout());
+		board.setVisible(true);
+		
+		//Text
 		textField.setBackground(new Color(25,25,25));
 		textField.setForeground(new Color(25,255,0));
 		textField.setFont(new Font("Ink Free", Font.BOLD, 75));
@@ -47,8 +113,9 @@ public class TicTacToe implements ActionListener{
 		titlePanel.setLayout(new BorderLayout());
 		titlePanel.setBounds(0,0,800,100);
 		
+		//3x3 board
 		buttonPanel.setLayout(new GridLayout(3,3));
-		buttonPanel.setBackground(new Color(150,150,150	));
+		buttonPanel.setBackground(new Color(150,150,150));
 		
 		for(int i = 0; i < 9; i++) {
 			buttons[i] = new JButton();
@@ -61,15 +128,15 @@ public class TicTacToe implements ActionListener{
 		}
 		
 		titlePanel.add(textField);
-		frame.add(titlePanel, BorderLayout.NORTH);
-		frame.add(buttonPanel);
+		board.add(titlePanel, BorderLayout.NORTH);
+		board.add(buttonPanel);
 		
 		firstTurn();
 	}
 	
+	//Action performed when clicked the board cell
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
 		for(int i = 0; i <9; i++) {
 			if(e.getSource() == buttons[i]) {
 				if(player1Turn) {
@@ -92,12 +159,11 @@ public class TicTacToe implements ActionListener{
 					}
 				}
 			}
-		}
-		
+		}	
 	}
 	
-	public void firstTurn() {
-		
+	//Randomize the first turn
+	public void firstTurn() {	
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
@@ -113,9 +179,9 @@ public class TicTacToe implements ActionListener{
 			player1Turn = false;
 			textField.setText("O turn");
 		}
-		
 	}
 	
+	//Function to pass the player
 	public void checkWin() {
 		if(checkWinCondition("X")) {
 			xWin();
@@ -128,12 +194,14 @@ public class TicTacToe implements ActionListener{
 		}
 	}
 	
+	//Highlight the cell for the winner
 	public void setWinBoard(int a, int b, int c) {
 		buttons[a].setBackground(Color.green);
 		buttons[b].setBackground(Color.green);
 		buttons[c].setBackground(Color.green);
 	}
 	
+	//Main function to check for every winning circumstances
 	public boolean checkWinCondition(String player) {
 		if ((buttons[0].getText().equals(player)) && (buttons[1].getText().equals(player)) && (buttons[2].getText().equals(player))) {
 			setWinBoard(0, 1, 2);
@@ -170,6 +238,7 @@ public class TicTacToe implements ActionListener{
 	    return false;
 	}
 	
+	//Check if the match is drawn
 	public boolean isDraw() {
 		for(JButton button : buttons) {
 			if(button.getText().equals("")) {
@@ -179,6 +248,7 @@ public class TicTacToe implements ActionListener{
 		return true;
 	}
 	
+	//Change text to represent the winner
 	public void xWin() {
 		textField.setText("X wins! Congrats!!!");
 		end();
@@ -194,6 +264,7 @@ public class TicTacToe implements ActionListener{
         end();
     }
 	
+	//A menu for user to choose
 	public void end() {
 		for(JButton button : buttons) {
 			button.setEnabled(false);
@@ -209,6 +280,7 @@ public class TicTacToe implements ActionListener{
 		}
 	}
 	
+	//Reset the board for a new game
 	public void gameReset() {
 		for(JButton button : buttons) {
 			button.setText("");
